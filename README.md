@@ -18,7 +18,7 @@ This project is a React single-page app that displays branch reservations. The s
 - Date helpers: date-fns
 - testing: jest
 
-## 3) Folder structure (key)
+## 3) Folder structure 
 - `src/main.tsx` — App entry, mounts React and router.
 - `src/App.tsx` — Top-level router provider.
 - `src/router.tsx` — Route definitions (lazy-loaded pages).
