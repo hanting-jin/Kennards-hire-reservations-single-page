@@ -21,7 +21,6 @@ const useMediaQuery = (query: string): boolean => {
     };
 
     mediaQueryList.addEventListener('change', listener);
-    setMatches(mediaQueryList.matches);
 
     return () => {
       mediaQueryList.removeEventListener('change', listener);

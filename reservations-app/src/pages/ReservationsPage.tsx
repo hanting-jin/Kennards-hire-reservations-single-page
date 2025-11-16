@@ -73,8 +73,6 @@ const IconWithTooltip = ({ children }: { children: ReactElement<{ 'aria-label'?:
 
 const handleAllocateToggle = (reservation: Reservation, checked: boolean | 'indeterminate') => {
   // TODO: submit allocation update for this reservation
-  // Placeholder implementation for now
-  // eslint-disable-next-line no-console
   console.log('Allocate toggle changed', {
     hireNumber: reservation.contract.hireNumber,
     checked,

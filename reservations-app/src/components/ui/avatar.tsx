@@ -23,7 +23,6 @@ export function Avatar({ src, name, className, ...props }: AvatarProps) {
       )}
     >
       {src ? (
-        // eslint-disable-next-line jsx-a11y/img-redundant-alt
         <img
           src={src}
           alt={name ? `${name} avatar` : 'User avatar'}
