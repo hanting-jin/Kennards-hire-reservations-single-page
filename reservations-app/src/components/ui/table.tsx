@@ -1,5 +1,5 @@
 import type { HTMLAttributes, TableHTMLAttributes } from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils/cn';
 
 export function Table({
   className,
@@ -21,7 +21,7 @@ export function TableHeader({
 }: HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <thead
-      className={cn('bg-slate-50 text-xs uppercase text-slate-500', className)}
+      className={cn('bg-slate-50 text-xs text-slate-500', className)}
       {...props}
     />
   );
@@ -69,7 +69,6 @@ export function TableCell({
   ...props
 }: HTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td className={cn('px-3 py-2 align-top', className)} {...props} />
+    <td className={cn('px-3 py-2 align-middle', className)} {...props} />
   );
 }
-

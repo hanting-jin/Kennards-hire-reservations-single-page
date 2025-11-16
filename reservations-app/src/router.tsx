@@ -3,7 +3,7 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { AppLayout, RouteFallback } from '@/components';
 
-const ReservationsPage = lazy(() => import('@/pages/Reservation/ReservationsPage'));
+const ReservationsPage = lazy(() => import('@/pages/ReservationsPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 const withSuspense = (element: ReactNode) => (
