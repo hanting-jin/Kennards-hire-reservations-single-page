@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ReservationsPage from '../ReservationsPage';
 import type { Reservation } from '@/api/reservationsApi';
@@ -12,13 +11,14 @@ jest.mock('@/api/reservationsApi', () => ({
   useReservationsQuery: jest.fn(),
 }));
 jest.mock('@/components', () => {
+  const React = require('react');
   const BranchSelect = ({ branchId, onChange }: { branchId: string; onChange: (id: string) => void }) =>
     React.createElement(
       'select',
       {
         'aria-label': 'Branch',
         value: branchId,
-        onChange: (e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.target.value),
+        onChange: (e: { target: { value: string } }) => onChange(e.target.value),
       },
       React.createElement('option', { value: branchId }, branchId),
     );
