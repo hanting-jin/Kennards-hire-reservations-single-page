@@ -1,21 +1,23 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactElement } from 'react';
 import { format } from 'date-fns';
 import {
   Truck,
   Warehouse,
-  FileDown,
-  CheckCircle2,
-  Circle,
   AlertTriangle,
   CircleDollarSign,
-  User2,
+  ArrowDownToLine,
 } from 'lucide-react';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
   useReservationsQuery,
   type ReservationLineItem,
-  type ReservationContract,
-  type ReservationValidation,
+  type Reservation,
 } from '@/api/reservationsApi';
 import {
   addDays,
@@ -28,7 +30,6 @@ import {
 } from '@/lib/utils/date';
 import {
   buildEquipmentSummary,
-  isReservationFullyAllocated,
 } from '@/lib/utils/reservations';
 import { BranchSelect } from '@/components';
 import { BranchId } from '@/enums';
@@ -36,6 +37,7 @@ import BookingTable, {
   type BookingTableConfig,
   type BookingTableColumn,
 } from '@/components/BookingTable';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const renderEquipmentLines = (items: ReservationLineItem[]) => {
   if (!items || items.length === 0) {
@@ -65,128 +67,38 @@ const renderEquipmentLines = (items: ReservationLineItem[]) => {
   );
 };
 
-const StatusIcons = ({
-  contract,
-  validationResult,
+const IconWithTooltip = ({
+  children,
 }: {
-  contract: ReservationContract;
-  validationResult?: ReservationValidation;
+  children: ReactElement<{ 'aria-label'?: string }>;
 }) => {
-  const icons: JSX.Element[] = [];
+  const ariaLabel = children.props['aria-label'];
 
-  const deposit = contract.depositInformation;
-
-  if (deposit?.depositRequired) {
-    if (deposit.isDepositOutstanding) {
-      icons.push(
-        <CircleDollarSign
-          key="deposit-outstanding"
-          className="h-4 w-4 text-red-600"
-          aria-label="Deposit outstanding"
-        />,
-      );
-    } else {
-      icons.push(
-        <CircleDollarSign
-          key="deposit-paid"
-          className="h-4 w-4 text-green-600"
-          aria-label="Deposit paid"
-        />,
-      );
-    }
-  }
-
-  if (validationResult?.errors?.length) {
-    icons.push(
-      <AlertTriangle
-        key="validation-error"
-        className="h-4 w-4 text-red-600"
-        aria-label="Validation errors"
-      />,
-    );
-  } else if (validationResult?.warnings?.length) {
-    icons.push(
-      <AlertTriangle
-        key="validation-warning"
-        className="h-4 w-4 text-yellow-500"
-        aria-label="Validation warnings"
-      />,
-    );
-  }
-
-  const isAccount =
-    contract.isAccountCustomer ||
-    contract.contacts.customer?.isCreditAccountCustomer;
-
-  if (isAccount) {
-    icons.push(
-      <User2
-        key="account-customer"
-        className="h-4 w-4 text-slate-700"
-        aria-label="Account customer"
-      />,
-    );
-  }
-
-  if (icons.length === 0) {
-    icons.push(
-      <CheckCircle2
-        key="ok"
-        className="h-4 w-4 text-green-600"
-        aria-label="Reservation OK"
-      />,
-    );
-  }
-
-  return <div className="flex items-center gap-1">{icons}</div>;
-};
-
-const TypeIcon = ({ deliveryRequired }: { deliveryRequired: boolean }) => {
-  if (deliveryRequired) {
-    return (
-      <Truck
-        className="h-4 w-4 text-red-600"
-        aria-label="Delivery reservation"
-      />
-    );
+  if (!ariaLabel) {
+    return children;
   }
 
   return (
-    <Warehouse
-      className="h-4 w-4 text-red-600"
-      aria-label="Pickup reservation"
-    />
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent>{ariaLabel}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
-const AvailabilityCell = () => {
-  return (
-    <button
-      type="button"
-      className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-      aria-label="Download availability document"
-    >
-      <FileDown className="h-4 w-4" />
-    </button>
-  );
-};
-
-const AllocatedCell = ({ allocated }: { allocated: boolean }) => {
-  return (
-    <div className="flex items-center justify-center">
-      {allocated ? (
-        <CheckCircle2
-          className="h-4 w-4 text-slate-700"
-          aria-label="Allocated"
-        />
-      ) : (
-        <Circle
-          className="h-4 w-4 text-slate-400"
-          aria-label="Not allocated"
-        />
-      )}
-    </div>
-  );
+const handleAllocateToggle = (
+  reservation: Reservation,
+  checked: boolean | 'indeterminate',
+) => {
+  // TODO: submit allocation update for this reservation
+  // Placeholder implementation for now
+  // eslint-disable-next-line no-console
+  console.log('Allocate toggle changed', {
+    hireNumber: reservation.contract.hireNumber,
+    checked,
+  });
 };
 
 const reservationColumns: BookingTableColumn[] = [
@@ -203,23 +115,78 @@ const reservationColumns: BookingTableColumn[] = [
     key: 'status',
     title: 'Status',
     width: '8%',
-    render: ({ reservation }) => (
-      <StatusIcons
-        contract={reservation.contract}
-        validationResult={reservation.validationResult}
-      />
-    ),
+    render: ({ reservation }) => {
+      const depositInfo = reservation.contract.depositInformation;
+      const hasDepositInfo = !!depositInfo;
+      const isDepositOutstanding = depositInfo?.isDepositOutstanding === true;
+
+      const hasWarnings =
+        !!reservation.validationResult?.warnings &&
+        reservation.validationResult.warnings.length > 0;
+
+      return (
+        <div className="flex items-center gap-1">
+          {hasDepositInfo && (
+            <IconWithTooltip>
+              <CircleDollarSign
+                className={`h-4 w-4 ${
+                  isDepositOutstanding ? 'text-green-600' : 'text-red-600'
+                }`}
+                aria-label={
+                  isDepositOutstanding ? 'Deposit outstanding' : 'No deposit outstanding'
+                }
+           
+              />
+            </IconWithTooltip>
+          )}
+          {hasWarnings && (
+            <IconWithTooltip>
+              <AlertTriangle
+                className="h-4 w-4 text-yellow-500"
+                aria-label="Reservation warnings"
+              />
+            </IconWithTooltip>
+          )}
+        </div>
+      );
+    },
   },
   {
     key: 'type',
     title: 'Type',
     width: '7%',
-    render: ({ reservation }) => (
-      <TypeIcon deliveryRequired={reservation.contract.deliveryRequired} />
-    ),
-    renderMobile: ({ reservation }) => (
-      <TypeIcon deliveryRequired={reservation.contract.deliveryRequired} />
-    ),
+    render: ({ reservation }) =>
+      reservation.contract.deliveryRequired ? (
+        <IconWithTooltip>
+          <Truck
+            className="h-4 w-4"
+            aria-label="Delivery reservation"
+          />
+        </IconWithTooltip>
+      ) : (
+        <IconWithTooltip>
+          <Warehouse
+            className="h-4 w-4"
+            aria-label="Pickup reservation"
+          />
+        </IconWithTooltip>
+      ),
+    renderMobile: ({ reservation }) =>
+      reservation.contract.deliveryRequired ? (
+        <IconWithTooltip>
+          <Truck
+            className="h-4 w-4"
+            aria-label="Delivery reservation"
+          />
+        </IconWithTooltip>
+      ) : (
+        <IconWithTooltip>
+          <Warehouse
+            className="h-4 w-4"
+            aria-label="Pickup reservation"
+          />
+        </IconWithTooltip>
+      ),
   },
   {
     key: 'time',
@@ -354,16 +321,50 @@ const reservationColumns: BookingTableColumn[] = [
     title: 'Availability',
     width: '4%',
     className: 'w-24',
-    render: () => <AvailabilityCell />,
+    render: () => (
+      <button
+        type="button"
+        aria-label="Download availability document"
+        onClick={() => {
+          console.log('download file');
+        }}
+      >
+        <IconWithTooltip>
+          <ArrowDownToLine
+            className="h-4 w-4"
+            aria-label="Download availability document"
+          />
+        </IconWithTooltip>
+      </button>
+    ),
   },
   {
     key: 'allocated',
     title: 'Allocated',
     width: '4%',
     className: 'w-20',
-    render: ({ reservation }) => (
-      <AllocatedCell allocated={isReservationFullyAllocated(reservation)} />
-    ),
+    render: ({ reservation }) => {
+      const lineItems = reservation.lineItems ?? [];
+
+      const hasUnallocatedNonBulkItem = lineItems.some(
+        (item) => item && item.isBulk === false && item.isAllocated === false,
+      );
+
+      if (!hasUnallocatedNonBulkItem) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            aria-label="Mark reservation as allocated"
+            onCheckedChange={(checked) =>
+              handleAllocateToggle(reservation, checked)
+            }
+          />
+        </div>
+      );
+    },
   },
 ];
 
@@ -397,8 +398,7 @@ const ReservationsPage = () => {
       return [];
     }
 
-    // Normalise reservation start date to YYYY-MM-DD so we can
-    // safely compare using string ordering.
+
     const formatKey = (date: Date) => format(date, 'yyyy-MM-dd');
 
     if (isDesktop) {

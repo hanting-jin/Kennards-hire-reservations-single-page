@@ -38,14 +38,11 @@ const Header = () => {
   };
 
   const handleMyAccount = () => {
-    // Placeholder for navigation to account page
-    // eslint-disable-next-line no-console
     console.log('My account clicked');
   };
 
   const handleLogout = () => {
-    // Placeholder for logout logic
-    // eslint-disable-next-line no-console
+
     console.log('Logout clicked');
   };
 

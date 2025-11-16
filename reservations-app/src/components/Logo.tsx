@@ -24,7 +24,6 @@ const Logo = ({
   };
 
   const image = (
-    // eslint-disable-next-line jsx-a11y/img-redundant-alt
     <img
       src={src}
       alt={alt}
