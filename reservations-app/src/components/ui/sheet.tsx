@@ -17,17 +17,12 @@ export function Sheet({ open, onOpenChange, children }: SheetProps) {
         aria-hidden="true"
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative z-50 h-full w-64 bg-white shadow-xl">
-        {children}
-      </div>
+      <div className="relative z-50 h-full w-64 bg-white shadow-xl">{children}</div>
     </div>
   );
 }
 
-export function SheetHeader({
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) {
+export function SheetHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
@@ -39,22 +34,10 @@ export function SheetHeader({
   );
 }
 
-export function SheetTitle({
-  className,
-  ...props
-}: HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2
-      className={cn('text-sm font-semibold text-slate-900', className)}
-      {...props}
-    />
-  );
+export function SheetTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
+  return <h2 className={cn('text-sm font-semibold text-slate-900', className)} {...props} />;
 }
 
-export function SheetContent({
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) {
+export function SheetContent({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return <div className={cn('px-4 py-3', className)} {...props} />;
 }
-

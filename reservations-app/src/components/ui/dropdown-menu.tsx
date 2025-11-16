@@ -1,9 +1,4 @@
-import type {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  MouseEvent,
-  ReactNode,
-} from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, MouseEvent, ReactNode } from 'react';
 import { createContext, useContext, useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 
@@ -38,16 +33,11 @@ export function DropdownMenu({ children }: DropdownMenuProps) {
   );
 }
 
-export interface DropdownMenuTriggerProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DropdownMenuTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-export function DropdownMenuTrigger({
-  children,
-  className,
-  ...props
-}: DropdownMenuTriggerProps) {
+export function DropdownMenuTrigger({ children, className, ...props }: DropdownMenuTriggerProps) {
   const { open, setOpen } = useDropdownMenuContext();
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -69,16 +59,11 @@ export function DropdownMenuTrigger({
   );
 }
 
-export interface DropdownMenuContentProps
-  extends HTMLAttributes<HTMLDivElement> {
+export interface DropdownMenuContentProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export function DropdownMenuContent({
-  children,
-  className,
-  ...props
-}: DropdownMenuContentProps) {
+export function DropdownMenuContent({ children, className, ...props }: DropdownMenuContentProps) {
   const { open } = useDropdownMenuContext();
 
   if (!open) return null;
@@ -96,8 +81,7 @@ export function DropdownMenuContent({
   );
 }
 
-export interface DropdownMenuItemProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DropdownMenuItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
@@ -130,4 +114,3 @@ export function DropdownMenuItem({
     </button>
   );
 }
-

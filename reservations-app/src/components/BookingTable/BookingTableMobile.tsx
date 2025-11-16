@@ -4,11 +4,7 @@ import type { Reservation } from '@/api/reservationsApi';
 import { filterPickup } from '@/lib/utils/reservations';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader } from '../ui/card';
-import type {
-  BookingTableColumn,
-  BookingTableMobileLayout,
-  BookingCellContext,
-} from './types';
+import type { BookingTableColumn, BookingTableMobileLayout, BookingCellContext } from './types';
 
 export interface BookingTableMobileProps {
   reservations: Reservation[];
@@ -30,8 +26,7 @@ const BookingTableMobile = ({
   isFetching,
 }: BookingTableMobileProps) => {
   const pickupReservations = filterPickup(reservations);
-  const showNoPickupMessage =
-    pickupReservations.length === 0 && reservations.length > 0;
+  const showNoPickupMessage = pickupReservations.length === 0 && reservations.length > 0;
 
   const resolvedLayout: BookingTableMobileLayout = useMemo(
     () => ({
@@ -83,24 +78,18 @@ const BookingTableMobile = ({
       )}
 
       {pickupReservations.map((reservation, rowIndex) => {
-        const topLeftColumns =
-          resolvedLayout.topLeft?.map((key) => findColumn(key)) ?? [];
+        const topLeftColumns = resolvedLayout.topLeft?.map((key) => findColumn(key)) ?? [];
         const topRightColumn = findColumn(resolvedLayout.topRight);
         const bodyColumns =
-          resolvedLayout.body?.map((key) => findColumn(key)).filter(Boolean) ??
-          [];
+          resolvedLayout.body?.map((key) => findColumn(key)).filter(Boolean) ?? [];
 
         return (
-          <Card
-            key={getRowKey ? getRowKey(reservation, rowIndex) : `row-${rowIndex}`}
-          >
+          <Card key={getRowKey ? getRowKey(reservation, rowIndex) : `row-${rowIndex}`}>
             <CardHeader className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
                 {topLeftColumns.map((column) =>
                   column ? (
-                    <span key={column.key}>
-                      {renderCell(column, reservation, rowIndex)}
-                    </span>
+                    <span key={column.key}>{renderCell(column, reservation, rowIndex)}</span>
                   ) : null,
                 )}
               </div>

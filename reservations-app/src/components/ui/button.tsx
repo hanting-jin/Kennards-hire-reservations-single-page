@@ -23,8 +23,7 @@ export function Button({
 
   const variantStyles: Record<ButtonVariant, string> = {
     default: 'bg-red-600 text-white hover:bg-red-700',
-    outline:
-      'border border-red-600 text-red-700 bg-white hover:bg-red-50 disabled:bg-white',
+    outline: 'border border-red-600 text-red-700 bg-white hover:bg-red-50 disabled:bg-white',
     ghost: 'text-red-700 hover:bg-red-50',
   };
 
@@ -45,4 +44,3 @@ export function Button({
     </button>
   );
 }
-

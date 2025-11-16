@@ -24,13 +24,7 @@ const Logo = ({
   };
 
   const image = (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className="block object-contain"
-    />
+    <img src={src} alt={alt} width={width} height={height} className="block object-contain" />
   );
 
   if (clickable) {
@@ -49,4 +43,3 @@ const Logo = ({
 };
 
 export default Logo;
-

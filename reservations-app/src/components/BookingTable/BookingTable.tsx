@@ -18,12 +18,7 @@ export interface BookingTableProps {
   title?: ReactNode;
 }
 
-const BookingTable = ({
-  config,
-  tableData,
-  filters,
-  title,
-}: BookingTableProps) => {
+const BookingTable = ({ config, tableData, filters, title }: BookingTableProps) => {
   const {
     columns,
     mobileLayout,
@@ -58,17 +53,14 @@ const BookingTable = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        {title && (
-          typeof title === 'string' ? (
-            <h1 className="text-2xl  text-slate-900">
-              {title}
-            </h1>
+        {title &&
+          (typeof title === 'string' ? (
+            <h1 className="text-2xl  text-slate-900">{title}</h1>
           ) : (
             <div>{title}</div>
-          )
-        )}
+          ))}
         <div className="flex flex-wrap items-center gap-6">
-      {showExpandLinesToggle && isDesktop && (
+          {showExpandLinesToggle && isDesktop && (
             <BookingTableExpandLinesToggle
               expandLines={expandLines}
               onExpandLinesChange={handleExpandLinesChange}
@@ -87,20 +79,16 @@ const BookingTable = ({
         />
       )}
 
-      {showSkeleton && (
-        <BookingTableLoadingState />
-      )}
+      {showSkeleton && <BookingTableLoadingState />}
 
-      {showError && (
-        <BookingTableErrorState message={errorMessage} onRetry={onRetry} />
-      )}
+      {showError && <BookingTableErrorState message={errorMessage} onRetry={onRetry} />}
 
-      {showEmpty && (
-        <BookingTableEmptyState />
-      )}
+      {showEmpty && <BookingTableEmptyState />}
 
-      {!showSkeleton && !showError && hasData && (
-        isDesktop ? (
+      {!showSkeleton &&
+        !showError &&
+        hasData &&
+        (isDesktop ? (
           <BookingTableDesktop
             reservations={reservations}
             columns={columns}
@@ -117,8 +105,7 @@ const BookingTable = ({
             onRefresh={onRefresh}
             isFetching={isFetching}
           />
-        )
-      )}
+        ))}
     </div>
   );
 };

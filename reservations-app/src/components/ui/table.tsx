@@ -1,10 +1,7 @@
 import type { HTMLAttributes, TableHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils/cn';
 
-export function Table({
-  className,
-  ...props
-}: TableHTMLAttributes<HTMLTableElement>) {
+export function Table({ className, ...props }: TableHTMLAttributes<HTMLTableElement>) {
   return (
     <div className="w-full overflow-x-auto rounded-md border border-slate-200 bg-white">
       <table
@@ -15,29 +12,15 @@ export function Table({
   );
 }
 
-export function TableHeader({
-  className,
-  ...props
-}: HTMLAttributes<HTMLTableSectionElement>) {
-  return (
-    <thead
-      className={cn('bg-slate-50 text-xs text-slate-500', className)}
-      {...props}
-    />
-  );
+export function TableHeader({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
+  return <thead className={cn('bg-slate-50 text-xs text-slate-500', className)} {...props} />;
 }
 
-export function TableBody({
-  className,
-  ...props
-}: HTMLAttributes<HTMLTableSectionElement>) {
+export function TableBody({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
   return <tbody className={cn('divide-y divide-slate-200', className)} {...props} />;
 }
 
-export function TableRow({
-  className,
-  ...props
-}: HTMLAttributes<HTMLTableRowElement>) {
+export function TableRow({ className, ...props }: HTMLAttributes<HTMLTableRowElement>) {
   return (
     <tr
       className={cn(
@@ -49,10 +32,7 @@ export function TableRow({
   );
 }
 
-export function TableHead({
-  className,
-  ...props
-}: HTMLAttributes<HTMLTableCellElement>) {
+export function TableHead({ className, ...props }: HTMLAttributes<HTMLTableCellElement>) {
   return (
     <th
       className={cn(
@@ -64,11 +44,6 @@ export function TableHead({
   );
 }
 
-export function TableCell({
-  className,
-  ...props
-}: HTMLAttributes<HTMLTableCellElement>) {
-  return (
-    <td className={cn('px-3 py-2 align-middle', className)} {...props} />
-  );
+export function TableCell({ className, ...props }: HTMLAttributes<HTMLTableCellElement>) {
+  return <td className={cn('px-3 py-2 align-middle', className)} {...props} />;
 }

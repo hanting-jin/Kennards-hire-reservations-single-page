@@ -1,4 +1,4 @@
-import type {  ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export interface LayoutProps {
   children: ReactNode;
@@ -11,13 +11,7 @@ export interface LayoutProps {
 const mergeClasses = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(' ');
 
-const Layout = ({
-  children,
-  header,
-  footer,
-  className,
-  fluid = false,
-}: LayoutProps) => {
+const Layout = ({ children, header, footer, className, fluid = false }: LayoutProps) => {
   const containerClass = mergeClasses(
     'flex min-h-screen flex-col bg-slate-50 text-slate-900 px-6 sm:px-4',
     className,
@@ -28,10 +22,8 @@ const Layout = ({
     fluid ? 'max-w-full' : 'mx-auto max-w-screen-xl',
   );
 
-
-
   return (
-    <div className={containerClass} >
+    <div className={containerClass}>
       {header}
       <div className={contentWrapperClass}>
         <main id="main-content" role="main" className="flex-1">

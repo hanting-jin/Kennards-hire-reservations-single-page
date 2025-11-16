@@ -104,16 +104,12 @@ export interface ReservationsApiParams {
   to: string;
 }
 
-export const fetchReservations = async (
-  params: ReservationsApiParams,
-): Promise<Reservation[]> => {
+export const fetchReservations = async (params: ReservationsApiParams): Promise<Reservation[]> => {
   const { branchId, from, to } = params;
 
   const path = `/branches/${encodeURIComponent(
     branchId,
-  )}/reservations?from=${encodeURIComponent(from)}&to=${encodeURIComponent(
-    to,
-  )}`;
+  )}/reservations?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
 
   const raw = await request<ReservationsApiResponse>(path, {
     method: 'GET',

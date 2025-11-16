@@ -1,9 +1,4 @@
-import type {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  MouseEvent,
-  ReactNode,
-} from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, MouseEvent, ReactNode } from 'react';
 import { createContext, useContext, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
@@ -35,17 +30,9 @@ export interface SelectProps {
   className?: string;
 }
 
-export function Select({
-  value,
-  defaultValue,
-  onValueChange,
-  children,
-  className,
-}: SelectProps) {
+export function Select({ value, defaultValue, onValueChange, children, className }: SelectProps) {
   const [open, setOpen] = useState(false);
-  const [internalValue, setInternalValue] = useState<string | undefined>(
-    defaultValue,
-  );
+  const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
 
   const selectedValue = value ?? internalValue;
 
@@ -67,23 +54,16 @@ export function Select({
         onValueChange: handleValueChange,
       }}
     >
-      <div className={cn('relative inline-block w-full text-left', className)}>
-        {children}
-      </div>
+      <div className={cn('relative inline-block w-full text-left', className)}>{children}</div>
     </SelectContext.Provider>
   );
 }
 
-export interface SelectTriggerProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface SelectTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
 }
 
-export function SelectTrigger({
-  children,
-  className,
-  ...props
-}: SelectTriggerProps) {
+export function SelectTrigger({ children, className, ...props }: SelectTriggerProps) {
   const { open, setOpen } = useSelectContext();
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -113,12 +93,7 @@ export interface SelectValueProps extends HTMLAttributes<HTMLSpanElement> {
   placeholder?: string;
 }
 
-export function SelectValue({
-  placeholder,
-  className,
-  children,
-  ...props
-}: SelectValueProps) {
+export function SelectValue({ placeholder, className, children, ...props }: SelectValueProps) {
   const content = children ?? placeholder ?? '';
 
   return (
@@ -139,11 +114,7 @@ export interface SelectContentProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export function SelectContent({
-  children,
-  className,
-  ...props
-}: SelectContentProps) {
+export function SelectContent({ children, className, ...props }: SelectContentProps) {
   const { open } = useSelectContext();
 
   if (!open) return null;
@@ -161,19 +132,12 @@ export function SelectContent({
   );
 }
 
-export interface SelectItemProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface SelectItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
   children: ReactNode;
 }
 
-export function SelectItem({
-  value,
-  children,
-  className,
-  onClick,
-  ...props
-}: SelectItemProps) {
+export function SelectItem({ value, children, className, onClick, ...props }: SelectItemProps) {
   const { value: selectedValue, onValueChange } = useSelectContext();
 
   const isSelected = selectedValue === value;
@@ -200,4 +164,3 @@ export function SelectItem({
     </button>
   );
 }
-

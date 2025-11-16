@@ -13,10 +13,7 @@ const NotFoundPage = () => {
         <p className="text-slate-600">The page you are looking for does not exist.</p>
       </div>
 
-      <Button
-        onClick={() => navigate('/')}
-        className="flex items-center gap-2"
-      >
+      <Button onClick={() => navigate('/')} className="flex items-center gap-2">
         <Home className="h-4 w-4" />
         Back to Home
       </Button>

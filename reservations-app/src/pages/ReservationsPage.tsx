@@ -1,19 +1,8 @@
 import { useMemo, useState, type ReactElement } from 'react';
 import { format } from 'date-fns';
-import {
-  Truck,
-  Warehouse,
-  AlertTriangle,
-  CircleDollarSign,
-  ArrowDownToLine,
-} from 'lucide-react';
+import { Truck, Warehouse, AlertTriangle, CircleDollarSign, ArrowDownToLine } from 'lucide-react';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   useReservationsQuery,
   type ReservationLineItem,
@@ -28,9 +17,7 @@ import {
   getWeekRange,
   parseReservationDate,
 } from '@/lib/utils/date';
-import {
-  buildEquipmentSummary,
-} from '@/lib/utils/reservations';
+import { buildEquipmentSummary } from '@/lib/utils/reservations';
 import { BranchSelect } from '@/components';
 import { BranchId } from '@/enums';
 import BookingTable, {
@@ -67,11 +54,7 @@ const renderEquipmentLines = (items: ReservationLineItem[]) => {
   );
 };
 
-const IconWithTooltip = ({
-  children,
-}: {
-  children: ReactElement<{ 'aria-label'?: string }>;
-}) => {
+const IconWithTooltip = ({ children }: { children: ReactElement<{ 'aria-label'?: string }> }) => {
   const ariaLabel = children.props['aria-label'];
 
   if (!ariaLabel) {
@@ -88,10 +71,7 @@ const IconWithTooltip = ({
   );
 };
 
-const handleAllocateToggle = (
-  reservation: Reservation,
-  checked: boolean | 'indeterminate',
-) => {
+const handleAllocateToggle = (reservation: Reservation, checked: boolean | 'indeterminate') => {
   // TODO: submit allocation update for this reservation
   // Placeholder implementation for now
   // eslint-disable-next-line no-console
@@ -129,13 +109,8 @@ const reservationColumns: BookingTableColumn[] = [
           {hasDepositInfo && (
             <IconWithTooltip>
               <CircleDollarSign
-                className={`h-4 w-4 ${
-                  isDepositOutstanding ? 'text-green-600' : 'text-red-600'
-                }`}
-                aria-label={
-                  isDepositOutstanding ? 'Deposit outstanding' : 'No deposit outstanding'
-                }
-           
+                className={`h-4 w-4 ${isDepositOutstanding ? 'text-green-600' : 'text-red-600'}`}
+                aria-label={isDepositOutstanding ? 'Deposit outstanding' : 'No deposit outstanding'}
               />
             </IconWithTooltip>
           )}
@@ -158,33 +133,21 @@ const reservationColumns: BookingTableColumn[] = [
     render: ({ reservation }) =>
       reservation.contract.deliveryRequired ? (
         <IconWithTooltip>
-          <Truck
-            className="h-4 w-4"
-            aria-label="Delivery reservation"
-          />
+          <Truck className="h-4 w-4" aria-label="Delivery reservation" />
         </IconWithTooltip>
       ) : (
         <IconWithTooltip>
-          <Warehouse
-            className="h-4 w-4"
-            aria-label="Pickup reservation"
-          />
+          <Warehouse className="h-4 w-4" aria-label="Pickup reservation" />
         </IconWithTooltip>
       ),
     renderMobile: ({ reservation }) =>
       reservation.contract.deliveryRequired ? (
         <IconWithTooltip>
-          <Truck
-            className="h-4 w-4"
-            aria-label="Delivery reservation"
-          />
+          <Truck className="h-4 w-4" aria-label="Delivery reservation" />
         </IconWithTooltip>
       ) : (
         <IconWithTooltip>
-          <Warehouse
-            className="h-4 w-4"
-            aria-label="Pickup reservation"
-          />
+          <Warehouse className="h-4 w-4" aria-label="Pickup reservation" />
         </IconWithTooltip>
       ),
   },
@@ -302,8 +265,7 @@ const reservationColumns: BookingTableColumn[] = [
     key: 'equipment',
     title: 'Equipment',
     width: '20%',
-    className:
-      'text-xs text-slate-800 whitespace-nowrap overflow-hidden text-ellipsis',
+    className: 'text-xs text-slate-800 whitespace-nowrap overflow-hidden text-ellipsis',
     render: ({ reservation, expandLines }) =>
       expandLines ? (
         renderEquipmentLines(reservation.lineItems)
@@ -330,10 +292,7 @@ const reservationColumns: BookingTableColumn[] = [
         }}
       >
         <IconWithTooltip>
-          <ArrowDownToLine
-            className="h-4 w-4"
-            aria-label="Download availability document"
-          />
+          <ArrowDownToLine className="h-4 w-4" aria-label="Download availability document" />
         </IconWithTooltip>
       </button>
     ),
@@ -358,9 +317,7 @@ const reservationColumns: BookingTableColumn[] = [
         <div className="flex items-center justify-center">
           <Checkbox
             aria-label="Mark reservation as allocated"
-            onCheckedChange={(checked) =>
-              handleAllocateToggle(reservation, checked)
-            }
+            onCheckedChange={(checked) => handleAllocateToggle(reservation, checked)}
           />
         </div>
       );
@@ -380,12 +337,8 @@ const ReservationsPage = () => {
 
   const currentWeek = getWeekRange(selectedWeekStart);
 
-  const from = isDesktop
-    ? formatDateForApi(currentWeek.start)
-    : formatDateForApi(selectedDate);
-  const to = isDesktop
-    ? formatDateForApi(currentWeek.end)
-    : formatDateForApi(selectedDate);
+  const from = isDesktop ? formatDateForApi(currentWeek.start) : formatDateForApi(selectedDate);
+  const to = isDesktop ? formatDateForApi(currentWeek.end) : formatDateForApi(selectedDate);
 
   const { data, isLoading, isFetching, isError, error, refetch } = useReservationsQuery({
     branchId,
@@ -397,7 +350,6 @@ const ReservationsPage = () => {
     if (!data) {
       return [];
     }
-
 
     const formatKey = (date: Date) => format(date, 'yyyy-MM-dd');
 
@@ -466,9 +418,7 @@ const ReservationsPage = () => {
         config={bookingTableConfig}
         tableData={filteredReservations}
         title="Reservations"
-        filters={
-          <BranchSelect branchId={branchId} onChange={setBranchId} />
-        }
+        filters={<BranchSelect branchId={branchId} onChange={setBranchId} />}
       />
     </div>
   );

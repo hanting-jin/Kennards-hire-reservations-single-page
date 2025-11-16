@@ -1,8 +1,7 @@
 import type { ImgHTMLAttributes, HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils/cn';
 
-export interface AvatarProps
-  extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
+export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
   src?: string;
   name?: string;
 }
@@ -38,11 +37,7 @@ export function Avatar({ src, name, className, ...props }: AvatarProps) {
   );
 }
 
-export function AvatarFallback({
-  className,
-  children,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) {
+export function AvatarFallback({ className, children, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
@@ -55,4 +50,3 @@ export function AvatarFallback({
     </div>
   );
 }
-

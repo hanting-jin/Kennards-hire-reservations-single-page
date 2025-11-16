@@ -26,12 +26,7 @@ const getEnvironmentLabel = (env: string | null | undefined) => {
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const environmentLabel = getEnvironmentLabel(
-    (typeof import.meta !== 'undefined' &&
-      (import.meta as any).env &&
-      (import.meta as any).env.VITE_APP_ENV) ||
-      null,
-  );
+  const environmentLabel = getEnvironmentLabel(import.meta.env?.VITE_APP_ENV ?? null);
 
   const handleLogoClick = () => {
     window.location.href = '/';
@@ -42,7 +37,6 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-
     console.log('Logout clicked');
   };
 

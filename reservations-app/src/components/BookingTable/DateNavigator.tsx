@@ -8,12 +8,7 @@ export interface DateNavigatorProps {
   isFetching: boolean;
 }
 
-export const DateNavigator = ({
-  label,
-  onPrev,
-  onNext,
-  isFetching,
-}: DateNavigatorProps) => {
+export const DateNavigator = ({ label, onPrev, onNext, isFetching }: DateNavigatorProps) => {
   return (
     <div className="mt-4 flex items-center justify-between gap-4">
       <Button size="md" onClick={onPrev}>
@@ -26,12 +21,10 @@ export const DateNavigator = ({
           <span className="mt-1 text-xs text-slate-500">Updating latest reservations…</span>
         )}
       </div>
-      <Button  size="md" onClick={onNext}>
+      <Button size="md" onClick={onNext}>
         Next
         <ChevronRight className="ml-1 h-4 w-4" />
       </Button>
     </div>
   );
 };
-
-

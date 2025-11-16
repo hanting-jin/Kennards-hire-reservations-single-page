@@ -2,14 +2,7 @@ import type { Reservation } from '@/api/reservationsApi';
 import { groupReservationsByDate } from '@/lib/utils/reservations';
 import { formatDateForDisplay, parseReservationDate } from '@/lib/utils/date';
 import BookingTableDateHeader from './BookingTableDateHeader';
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableCell,
-} from '../ui/table';
+import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '../ui/table';
 import type { BookingTableColumn, BookingCellContext } from './types';
 
 export interface BookingTableDesktopProps {
@@ -33,8 +26,7 @@ const BookingTableDesktop = ({
       {entries.map(([dateKey, items]) => {
         const sorted = [...items].sort(
           (a, b) =>
-            parseReservationDate(a.start).getTime() -
-            parseReservationDate(b.start).getTime(),
+            parseReservationDate(a.start).getTime() - parseReservationDate(b.start).getTime(),
         );
 
         const date = parseReservationDate(sorted[0].start);
@@ -50,9 +42,7 @@ const BookingTableDesktop = ({
                     <TableHead
                       key={column.key}
                       className={column.headerClassName}
-                      style={
-                        column.width ? { width: column.width as string | number } : undefined
-                      }
+                      style={column.width ? { width: column.width as string | number } : undefined}
                     >
                       {column.title}
                     </TableHead>
@@ -62,11 +52,7 @@ const BookingTableDesktop = ({
               <TableBody>
                 {sorted.map((reservation, rowIndex) => (
                   <TableRow
-                    key={
-                      getRowKey
-                        ? getRowKey(reservation, rowIndex)
-                        : `${dateKey}-${rowIndex}`
-                    }
+                    key={getRowKey ? getRowKey(reservation, rowIndex) : `${dateKey}-${rowIndex}`}
                   >
                     {columns.map((column) => {
                       const ctx: BookingCellContext = {

@@ -41,7 +41,7 @@ export const formatDateForApi = (date: Date): string => {
 };
 
 export const formatDateForDisplay = (date: Date): string => {
-  return format(date, "EEEE do MMMM yyyy");
+  return format(date, 'EEEE do MMMM yyyy');
 };
 
 export const formatDateRangeForDisplay = (start: Date, end: Date): string => {
@@ -61,4 +61,3 @@ export const formatDateRangeForDisplay = (start: Date, end: Date): string => {
 export const parseReservationDate = (dateString: string): Date => {
   return parseISO(dateString);
 };
-
