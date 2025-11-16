@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "types": ["jest", "node"],
+    "isolatedModules": true
+  },
+  "include": ["src"]
+}

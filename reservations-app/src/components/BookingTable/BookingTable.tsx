@@ -68,7 +68,7 @@ const BookingTable = ({ config, tableData, filters, title }: BookingTableProps) 
           ) : (
             <div>{title}</div>
           ))}
-        <div className={`flex ${isDesktop ? 'flex-wrap items-center gap-6' : 'items-start gap-3'}`}>
+        <div className={`flex ${isDesktop ? 'items-center gap-6' : 'flex-col items-start gap-3'}`}>
           {showExpandLinesToggle && isDesktop && (
             <BookingTableExpandLinesToggle
               expandLines={expandLines}

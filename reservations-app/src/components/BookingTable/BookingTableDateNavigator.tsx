@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
+import PollingProgress from '../PollingProgress';
 import { Button } from '../ui/button';
 
 export interface BookingTableDateNavigatorProps {
@@ -34,9 +35,7 @@ export const BookingTableDateNavigator = ({
       </Button>
       <div className="flex flex-1 flex-col items-center">
         <span className={labelClass}>{label}</span>
-        {isFetching && (
-          <span className="mt-1 text-xs text-slate-500">Updating latest reservations…</span>
-        )}
+        <PollingProgress isFetching={isFetching} />
       </div>
       <Button size={isMobile ? 'lg' : 'md'} onClick={onNext} className={buttonClass}>
         Next

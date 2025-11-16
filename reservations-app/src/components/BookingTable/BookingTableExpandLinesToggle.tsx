@@ -10,7 +10,7 @@ const BookingTableExpandLinesToggle = ({
   onExpandLinesChange,
 }: BookingTableExpandLinesToggleProps) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-60">
       <Switch checked={expandLines} onCheckedChange={onExpandLinesChange} />
       <span className="text-sm font-medium text-slate-700">Expand lines</span>
     </div>

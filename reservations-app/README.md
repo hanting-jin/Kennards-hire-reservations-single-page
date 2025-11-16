@@ -1,75 +1,65 @@
-# React + TypeScript + Vite
+# Kennards Hire Reservations Single Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React single-page app that displays branch reservations. The sections below explain how to install and run it locally, the tech stack used, the folder layout, how to use the core `BookingTable` component, and how polling works.
 
-Currently, two official plugins are available:
+## 1) Install and start locally
+- Prerequisites: Node.js 18+ and npm.
+- Install dependencies: `npm install`
+- Start dev server: `npm run dev` 
+- Build for production: `npm run build`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 2) Tech stack
+- Framework: React 18 + TypeScript
+- Bundler/dev server: Vite
+- Styling: Tailwind-style utility classes (via `index.css` and component classNames)
+- UI primitives: Headless components in `src/components/ui` plus Lucide icons
+- Data fetching/state: React Query (@tanstack/react-query)
+- Routing: React Router
+- Date helpers: date-fns
+- testing: jest
 
-## React Compiler
+## 3) Folder structure (key)
+- `src/main.tsx` — App entry, mounts React and router.
+- `src/App.tsx` — Top-level router provider.
+- `src/router.tsx` — Route definitions (lazy-loaded pages).
+- `src/AppLayout.tsx` and `src/components/Layout.tsx` — Page chrome with header.
+- `src/pages/ReservationsPage.tsx` — Main reservations screen + data hook wiring.
+- `src/components/BookingTable/` — Core table UI (desktop/mobile, headers, states).
+- `src/api/` — API client and React Query hooks.
+- `src/lib/utils/` — Date and reservation helpers.
+- `src/enums.ts` — Shared enums (e.g., BranchId).
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 4) BookingTable usage
+`BookingTable` renders the reservations list for both desktop and mobile. You pass a config object plus the data to display.
 
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
+Basic example (see `src/pages/ReservationsPage.tsx` for the real usage):
+```tsx
+<BookingTable
+  title="Reservations"
+  tableData={reservations} // Reservation[]
+  config={{
+    columns,                 // BookingTableColumn[]
+    mobileLayout: {          // Optional mobile layout slots
+      topLeft: ['time', 'type'],
+      topRight: 'hireNumber',
+      body: ['customer', 'contact', 'phone', 'equipment'],
     },
-  },
-])
+    getRowKey: (r) => r.contract.hireNumber,
+    showDateNavigator: true, // Shows Prev/Next and date range label
+    rangeLabel,              // String label for the current range/day
+    onPrev, onNext,          // Handlers for navigation
+    showExpandLinesToggle: true, // Desktop toggle to expand line items
+    isLoading, isFetching, isError, // States from React Query
+    errorMessage,            // Optional error text
+    onRetry: refetch,        // Retry handler for errors
+    onRefresh: refetch,      // Mobile refresh button handler
+  }}
+  filters={<BranchSelect branchId={branchId} onChange={setBranchId} />}
+/>
 ```
+- Desktop: shows all reservations within the selected week, grouped by date, with optional expanded line items.
+- Mobile: shows only pickup reservations for the selected day; when none exist it shows “No pickup reservations”.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 5) API polling
+- The reservations query uses React Query’s `useQuery` with `refetchInterval: 30000` (30 seconds) defined in `src/api/reservationsApi.ts`.
+- While fetching, the UI keeps previous data to avoid flashing (`placeholderData: keepPreviousData`) and shows a subtle “Updating latest reservations…” hint in the date navigator when `isFetching` is true.
