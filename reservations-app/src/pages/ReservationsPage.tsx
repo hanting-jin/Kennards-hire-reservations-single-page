@@ -392,9 +392,7 @@ const ReservationsPage = () => {
   const bookingTableConfig: BookingTableConfig = {
     columns: reservationColumns,
     mobileLayout: {
-      topLeft: ['time', 'type'],
-      topRight: 'hireNumber',
-      body: ['customer', 'contact', 'phone', 'equipment'],
+      body: ['customer', 'equipment'],
     },
     getRowKey: (reservation) => reservation.contract.hireNumber,
     showDateNavigator: true,

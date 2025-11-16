@@ -13,12 +13,12 @@ const mergeClasses = (...classes: Array<string | false | null | undefined>) =>
 
 const Layout = ({ children, header, footer, className, fluid = false }: LayoutProps) => {
   const containerClass = mergeClasses(
-    'flex min-h-screen flex-col bg-slate-50 text-slate-900 px-6 sm:px-4',
+    'flex min-h-screen flex-col bg-white text-slate-900 px-3 sm:px-4',
     className,
   );
 
   const contentWrapperClass = mergeClasses(
-    'flex w-full flex-1 flex-col gap-6 px-4 py-4 sm:px-6 sm:py-6 lg:px-8',
+    'flex w-full flex-1 flex-col gap-5 px-1 py-4 sm:px-6 sm:py-6 lg:px-8',
     fluid ? 'max-w-full' : 'mx-auto max-w-screen-xl',
   );
 

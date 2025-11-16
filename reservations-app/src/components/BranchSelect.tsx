@@ -21,10 +21,10 @@ const BranchSelect = ({ branchId, onChange }: BranchSelectProps) => {
   const selectedBranch = BRANCHES.find((branch) => branch.id === branchId);
 
   return (
-    <div className="flex flex-col items-start gap-2 w-60">
-      <span className="text-sm font-medium text-slate-700">Branch</span>
+    <div className="flex w-full max-w-[220px] flex-col items-end gap-1 text-right sm:items-start sm:text-left">
+      <span className="text-sm font-semibold text-slate-400">Branch</span>
       <Select value={branchId} onValueChange={handleChange}>
-        <SelectTrigger>
+        <SelectTrigger className="h-11 rounded-md border-slate-200 px-4 text-base shadow-[0_3px_10px_rgba(0,0,0,0.12)]">
           <SelectValue placeholder={selectedBranch?.label ?? 'Select a branch'} />
         </SelectTrigger>
         <SelectContent>

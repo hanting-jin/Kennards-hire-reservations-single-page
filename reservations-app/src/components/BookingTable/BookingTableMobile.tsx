@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
-import { RefreshCcw } from 'lucide-react';
+import { ChevronRight, X } from 'lucide-react';
 import type { Reservation } from '@/api/reservationsApi';
 import { filterPickup } from '@/lib/utils/reservations';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader } from '../ui/card';
+import { Card } from '../ui/card';
 import type { BookingTableColumn, BookingTableMobileLayout, BookingCellContext } from './types';
 
 export interface BookingTableMobileProps {
@@ -12,8 +11,6 @@ export interface BookingTableMobileProps {
   layout?: BookingTableMobileLayout;
   expandLines: boolean;
   getRowKey?: (reservation: Reservation, index: number) => string | number;
-  onRefresh?: () => void;
-  isFetching: boolean;
 }
 
 const BookingTableMobile = ({
@@ -22,11 +19,9 @@ const BookingTableMobile = ({
   layout,
   expandLines,
   getRowKey,
-  onRefresh,
-  isFetching,
 }: BookingTableMobileProps) => {
   const pickupReservations = filterPickup(reservations);
-  const showNoPickupMessage = pickupReservations.length === 0 && reservations.length > 0;
+  const showNoPickupMessage = pickupReservations.length === 0;
 
   const resolvedLayout: BookingTableMobileLayout = useMemo(
     () => ({
@@ -55,61 +50,44 @@ const BookingTableMobile = ({
   };
 
   return (
-    <div className="mt-4 space-y-4">
-      {onRefresh && (
-        <div className="flex justify-center">
-          <Button
-            variant="default"
-            size="md"
-            onClick={onRefresh}
-            disabled={isFetching}
-            className="min-w-[140px]"
-          >
-            <RefreshCcw className="mr-2 h-4 w-4" />
-            {isFetching ? 'Refreshing…' : 'Refresh'}
-          </Button>
-        </div>
-      )}
-
+    <div className="mt-3 space-y-3">
       {showNoPickupMessage && (
-        <div className="rounded-md border border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-600">
-          No pickup reservations
-        </div>
+        <div className="py-4 text-center text-sm text-slate-600">No pickup reservations</div>
       )}
 
       {pickupReservations.map((reservation, rowIndex) => {
-        const topLeftColumns = resolvedLayout.topLeft?.map((key) => findColumn(key)) ?? [];
-        const topRightColumn = findColumn(resolvedLayout.topRight);
         const bodyColumns =
           resolvedLayout.body?.map((key) => findColumn(key)).filter(Boolean) ?? [];
+        const primaryColumn = bodyColumns[0];
+        const secondaryColumns = bodyColumns.slice(1);
 
         return (
-          <Card key={getRowKey ? getRowKey(reservation, rowIndex) : `row-${rowIndex}`}>
-            <CardHeader className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                {topLeftColumns.map((column) =>
-                  column ? (
-                    <span key={column.key}>{renderCell(column, reservation, rowIndex)}</span>
-                  ) : null,
-                )}
-              </div>
-              {topRightColumn && (
-                <span className="text-xs text-slate-500">
-                  {renderCell(topRightColumn, reservation, rowIndex)}
-                </span>
-              )}
-            </CardHeader>
-            {bodyColumns.length > 0 && (
-              <CardContent className="space-y-1 text-xs text-slate-800">
-                {bodyColumns.map((column) =>
-                  column ? (
-                    <div key={column.key} className="text-slate-800">
-                      {renderCell(column, reservation, rowIndex)}
+          <Card
+            key={getRowKey ? getRowKey(reservation, rowIndex) : `row-${rowIndex}`}
+            className="rounded-sm border-slate-200 shadow-[0_3px_10px_rgba(0,0,0,0.12)]"
+          >
+            <div className="flex items-center justify-between gap-3 px-4 py-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-semibold text-white shadow-[0_4px_10px_rgba(0,0,0,0.2)]">
+                  <X className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  {primaryColumn && (
+                    <div className="text-base font-semibold text-slate-900">
+                      {renderCell(primaryColumn, reservation, rowIndex)}
                     </div>
-                  ) : null,
-                )}
-              </CardContent>
-            )}
+                  )}
+                  {secondaryColumns.map((column) =>
+                    column ? (
+                      <div key={column.key} className="text-sm text-slate-700">
+                        {renderCell(column, reservation, rowIndex)}
+                      </div>
+                    ) : null,
+                  )}
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-400" />
+            </div>
           </Card>
         );
       })}

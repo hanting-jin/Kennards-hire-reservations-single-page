@@ -10,11 +10,19 @@ export interface UserInfoProps {
   name: string;
   id: string;
   avatarUrl?: string;
+  avatarClassName?: string;
   onMyAccount: () => void;
   onLogout: () => void;
 }
 
-const UserInfo = ({ name, id, avatarUrl, onMyAccount, onLogout }: UserInfoProps) => {
+const UserInfo = ({
+  name,
+  id,
+  avatarUrl,
+  avatarClassName,
+  onMyAccount,
+  onLogout,
+}: UserInfoProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-3">
@@ -22,7 +30,7 @@ const UserInfo = ({ name, id, avatarUrl, onMyAccount, onLogout }: UserInfoProps)
           <span className="text-sm font-semibold text-slate-900">{name}</span>
           <span className="text-[11px] uppercase tracking-wide text-slate-500">{id}</span>
         </div>
-        <Avatar src={avatarUrl} name={name} />
+        <Avatar src={avatarUrl} name={name} className={avatarClassName} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <div className="px-3 py-2 text-xs text-slate-500 md:hidden">

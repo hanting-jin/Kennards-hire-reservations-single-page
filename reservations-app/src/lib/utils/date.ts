@@ -41,7 +41,7 @@ export const formatDateForApi = (date: Date): string => {
 };
 
 export const formatDateForDisplay = (date: Date): string => {
-  return format(date, 'EEEE do MMMM yyyy');
+  return format(date, 'EEE do MMM yyyy');
 };
 
 export const formatDateRangeForDisplay = (start: Date, end: Date): string => {

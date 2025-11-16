@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 import Logo from './Logo';
 import UserInfo from './UserInfo';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 const getEnvironmentLabel = (env: string | null | undefined) => {
   const normalized = String(env ?? '').toLowerCase();
@@ -27,6 +28,7 @@ const getEnvironmentLabel = (env: string | null | undefined) => {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const environmentLabel = getEnvironmentLabel(import.meta.env?.VITE_APP_ENV ?? null);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   const handleLogoClick = () => {
     window.location.href = '/';
@@ -40,30 +42,37 @@ const Header = () => {
     console.log('Logout clicked');
   };
 
+  const brandContent = isDesktop ? (
+    <Logo
+      src="/src/assets/Kennards-Hire-logo.svg"
+      alt="Kennards Hire"
+      width={160}
+      height={32}
+      clickable
+      onClick={handleLogoClick}
+    />
+  ) : (
+    <span>Kennards Hire</span>
+  );
+
   return (
     <>
       <header className="border-b-2 border-red-500 bg-white">
-        <div className="mx-auto flex w-full items-center justify-between py-2">
+        <div className="mx-auto flex w-full items-center justify-between px-1 py-3 sm:px-2">
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
               aria-label="Open navigation"
               onClick={() => setIsMenuOpen(true)}
+              className="text-red-600"
             >
-              <Menu className="h-4 w-4" />
+              <Menu className="h-5 w-5" />
             </Button>
             <div className="flex items-start gap-3">
-              <Logo
-                src="/src/assets/Kennards-Hire-logo.svg"
-                alt="Kennards Hire"
-                width={160}
-                height={32}
-                clickable
-                onClick={handleLogoClick}
-              />
+              {brandContent}
               {environmentLabel && (
-                <span className="mt-1 text-xs font-semibold uppercase tracking-wide text-gray-600">
+                <span className="mt-1 text-sm font-semibold uppercase tracking-wide text-gray-700">
                   {environmentLabel}
                 </span>
               )}
@@ -75,6 +84,7 @@ const Header = () => {
               id="8520 - Information Technology"
               onMyAccount={handleMyAccount}
               onLogout={handleLogout}
+              avatarClassName="h-10 w-10 text-sm shadow-sm"
             />
           </div>
         </div>
